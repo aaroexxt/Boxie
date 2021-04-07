@@ -1,17 +1,73 @@
+//Basic react deps
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+//Specific components
+import ComponentBox from './componentBox.jsx'
+import NavHeader from './NavHeader.jsx'
+
+const states = {
+	selectFile: 1,
+	displayBoxes: 2
+}
+
+class Boxie extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			current: 0,
+			boxes: []
+		}
+		this.handleStateChange(states.selectFile)
+	}
+
+	handleStateChange(newState) {
+		let defaulted = false;
+		switch(newState) {
+			case states.selectFile:
+				break;
+			default:
+				defaulted = true;
+		}
+
+		if (!defaulted) this.state.current = newState; //is it a valid state?
+	}
+
+	render() {
+		console.log("CurrentState: "+this.state.current)
+
+
+		var content;
+		switch(this.state.current) {
+			case states.selectFile:
+				content = (
+					<h1> pog </h1>
+				)
+				break;
+			case states.displayBoxes:
+				content = this.state.boxes;
+				break;
+			case states.componentLookup:
+				return 
+			default:
+				content = (
+					<h1> Uh oh! Undefined state '{this.state.current}' :( </h1>
+				)
+		}
+
+		return [
+			<NavHeader />,
+			content
+		]
+	}
+}
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Boxie />,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
