@@ -39,7 +39,7 @@ class ComponentBox extends React.Component {
 			})
 
 			content.push(
-				<Grid item xs={10/section.assignments.length}>
+				<Grid item xs={Math.ceil(6/section.assignments.length)}>
 					{sectionContent}
 				</Grid>
 			)
