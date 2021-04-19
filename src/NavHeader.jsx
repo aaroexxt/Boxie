@@ -70,9 +70,9 @@ class NavHeader extends React.Component {
     const {classes} = this.props;
     
     return (
-      <div>
+      <div className={classes.root}>
         <AppBar position="static" color="default">
-          <Toolbar className={classes.root}>
+          <Toolbar>
             <Typography className={classes.title} variant="h6">
               Boxie Alpha V1.0
             </Typography>

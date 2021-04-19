@@ -3,13 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+//Addtl nodejs libs
+import { saveAs } from 'file-saver';
+
 //Specific components
 import ComponentBox from './componentBox.jsx'
 import DatabaseLS from "./databaseLS.jsx"
 import NavHeader from './NavHeader.jsx'
 
+//Util functions
 import mutateState from './mutateState.jsx'
-import { saveAs } from 'file-saver';
+import {componentLookup, getSpaceInBox} from "./utils/lookup.js";
+import {componentDefinitions as cDefs} from "./utils/componentDefinitions.js"
+
+import storage from './storageTemp.jsx';
+
 
 class Boxie extends React.Component {
 	constructor(props) {
@@ -25,10 +33,10 @@ class Boxie extends React.Component {
 			menu: {
 				options: [
 					["Load/Store DB", true], //name, disabled
+					["Display Boxes", false],
 					["Add", false],
 					["Delete", false],
 					["Save Data", false],
-					["Display Boxes", false],
 					["Lookup", false],
 					["Export Labels", false],
 					["BOM Management", false]
@@ -37,6 +45,10 @@ class Boxie extends React.Component {
 			},
 			databaseStarted: false
 		}
+
+		setTimeout(() => {
+			this.handleStorageUpload(JSON.stringify(storage));
+		}, 200);
 	}
 
 	handleMenuChange = (event, idx) => {
@@ -98,10 +110,47 @@ class Boxie extends React.Component {
 	}
 
 	handleFileSave = () => {
-		console.log("Save")
     	let jsonSave = JSON.stringify(this.state.store);
     	var blob = new Blob([jsonSave], {type: "text/plain;charset=utf-8"});
       	saveAs(blob, "storage.json");
+    }
+
+    generateBoxes = store => {
+    	let content = [];
+    	for (let idx=0; idx<this.state.store.boxes.length; idx++) {
+    		let box = this.state.store.boxes[idx];
+    		content.push(<ComponentBox
+    			box={box}
+    			getComponentInfo={uuid => {
+    				let component = componentLookup(this.state.store, uuid);
+    				let info;
+    				switch(component.type) {
+						case cDefs.types.RESISTOR:
+						case cDefs.types.CAPACITOR:
+							info = component.additional.value+component.additional.valueUnit;
+							break;
+						case cDefs.types.IC:
+						case cDefs.types.OTHER:
+							info = component.additional.identifier;
+							break;
+						case cDefs.types.CRYSTAL:
+							info = component.additional.frequency+component.additional.frequencyUnit;
+							break;
+						case cDefs.types.LED:
+							info = component.additional.color;
+							break;
+						default:
+							info = "*";
+							break;
+					}
+					return info;
+    			}}
+    			key={idx}
+    		/>)
+    		content.push(<br />)
+    	}
+
+    	return content;
     }
 
 	render() {
@@ -110,11 +159,6 @@ class Boxie extends React.Component {
 
 		var content;
 		switch(this.state.menu.selected) {
-			case this.nameToMenuIdx("Load Box"):
-				content = (
-					<h1> pog </h1>
-				)
-				break;
 			case this.nameToMenuIdx("Load/Store DB"):
 				content = (
 					<DatabaseLS
@@ -127,14 +171,20 @@ class Boxie extends React.Component {
 				)
 				break;
 			case this.nameToMenuIdx("Display Boxes"):
-				content = this.state.boxes;
+				content = (
+					<div style={{"paddingLeft": "10px"}}>
+						<h1> All Boxes </h1>
+						{this.generateBoxes(this.state.store)}
+					</div>
+				)
 				break;
 			case this.nameToMenuIdx("Lookup"):
-				return 
+				break;
 			default:
 				content = (
 					<h1 style={{"color": "red"}}> Uh oh! Undefined state '{this.menuIdxToName(this.state.menu.selected) || this.state.menu.selected}' :( </h1>
 				)
+				break;
 		}
 
 		return [
