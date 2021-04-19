@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 //UI stuff
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -43,7 +43,7 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper
@@ -53,63 +53,49 @@ const useStyles = makeStyles((theme) => ({
     "padding-right": theme.spacing(1),
     "white-space": "nowrap"
   }
-}));
+});
 
-export default function NavHeader() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(2);
+class NavHeader extends React.Component {
+  generateTabs() {
+    let tabs = []
+    for (let i=0; i<this.props.tabs.length; i++) {
+      let tab = this.props.tabs[i];
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+      tabs.push(<Tab key={i} label={tab[0]} {...a11yProps(i)} disabled={!tab[1]} />)
+    }
+    return tabs;
+  }
 
-  return (
-    <div>
-      <AppBar position="static" color="default">
-        <Toolbar className={classes.root}>
-          <Typography className={classes.title} variant="h6">
-            Boxie Alpha V1.0
-          </Typography>
+  render() {
+    const {classes} = this.props;
+    
+    return (
+      <div>
+        <AppBar position="static" color="default">
+          <Toolbar className={classes.root}>
+            <Typography className={classes.title} variant="h6">
+              Boxie Alpha V1.0
+            </Typography>
 
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} disabled />
-            <Tab label="Item Three" {...a11yProps(2)} />
-            <Tab label="Item Four" {...a11yProps(3)} />
-            <Tab label="Item Five" {...a11yProps(4)} />
-            <Tab label="Item Six" {...a11yProps(5)} />
-            <Tab label="Item Seven" {...a11yProps(6)} />
-          </Tabs>
-        </Toolbar>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
-    </div>
-  );
+            <Tabs
+              value={this.props.selected}
+              onChange={this.props.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              {this.generateTabs()}
+            </Tabs>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 }
+
+NavHeader.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(NavHeader);
