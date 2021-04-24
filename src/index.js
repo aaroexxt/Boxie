@@ -46,7 +46,7 @@ class Boxie extends React.Component {
 			menu: {
 				options: [
 					["Load/Store DB", true], //name, disabled
-					["Display Boxes", false],
+					["Display/Modify Boxes", false],
 					["Add", false],
 					["Delete", false],
 					["Save Data", false],
@@ -192,7 +192,7 @@ class Boxie extends React.Component {
 					/>
 				)
 				break;
-			case this.nameToMenuIdx("Display Boxes"):
+			case this.nameToMenuIdx("Display/Modify Boxes"):
 				let boxSelectors = [];
 				for (let idx=0; idx<this.state.store.boxes.length; idx++) {
 					let box = this.state.store.boxes[idx];
@@ -200,6 +200,7 @@ class Boxie extends React.Component {
 					let space = getFilledSpaceInBox(box);
     				boxSelectors.push(<option disabled={space==0?true:false} value={idx}>{title}</option>);
     			}
+    			boxSelectors.push(<option value={-1}>All Boxes (Warning: Long Load)</option>)
 
 				content = (
 					<div style={{"paddingLeft": "10px"}}>
