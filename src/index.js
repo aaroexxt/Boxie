@@ -5,19 +5,32 @@ import './index.css';
 
 //Addtl nodejs libs
 import { saveAs } from 'file-saver';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 //Specific components
-import ComponentBox from './componentBox.jsx'
+import StorageBox from './StorageBox.jsx'
 import DatabaseLS from "./databaseLS.jsx"
 import NavHeader from './NavHeader.jsx'
 
 //Util functions
 import mutateState from './mutateState.jsx'
-import {componentLookup, getSpaceInBox} from "./utils/lookup.js";
+import {componentLookup, getFreeSpaceInBox, getFilledSpaceInBox} from "./utils/lookup.js";
 import {componentDefinitions as cDefs} from "./utils/componentDefinitions.js"
 
 import storage from './storageTemp.jsx';
 
+
+/*
+TODO: Dark mode https://tombrow.com/dark-mode-website-css and https://web.dev/prefers-color-scheme/
+fix box rendering sideways
+react grid draggable:
+1) https://yudhajitadhikary.medium.com/implementation-of-drag-drop-using-react-grid-layout-76c4f8c03565
+2) https://github.com/react-grid-layout/react-grid-layout/blob/master/test/examples/0-showcase.jsx
+*/
 
 class Boxie extends React.Component {
 	constructor(props) {
@@ -43,6 +56,7 @@ class Boxie extends React.Component {
 				],
 				selected: 0
 			},
+			boxSelectedIdx: "",
 			databaseStarted: false
 		}
 
@@ -94,11 +108,12 @@ class Boxie extends React.Component {
 				if (!parsedData.hasOwnProperty(required[i])) return "File invalid: missing required property '"+required[i]+"'";
 			}
 
+			this.state.boxSelectedIdx = 0;
 			this.state.store = {
 				"boxes": parsedData.boxes,
 				"components": parsedData.components,
 				"componentTotal": parsedData.componentTotal,
-				"boxTotal": parsedData.boxTotal
+				"boxTotal": parsedData.boxTotal,
 			};
 			this.setState(this.state)
 
@@ -115,42 +130,49 @@ class Boxie extends React.Component {
       	saveAs(blob, "storage.json");
     }
 
-    generateBoxes = store => {
+    handleBoxChange = (newBox, idx) => {
+    	this.state.store.boxes[idx] = newBox;
+    }
+
+    generateBoxes = () => {
+    	//Render all boxes
     	let content = [];
-    	for (let idx=0; idx<this.state.store.boxes.length; idx++) {
-    		let box = this.state.store.boxes[idx];
-    		content.push(<ComponentBox
-    			box={box}
-    			getComponentInfo={uuid => {
-    				let component = componentLookup(this.state.store, uuid);
-    				let info;
-    				switch(component.type) {
-						case cDefs.types.RESISTOR:
-						case cDefs.types.CAPACITOR:
-							info = component.additional.value+component.additional.valueUnit;
-							break;
-						case cDefs.types.IC:
-						case cDefs.types.OTHER:
-							info = component.additional.identifier;
-							break;
-						case cDefs.types.CRYSTAL:
-							info = component.additional.frequency+component.additional.frequencyUnit;
-							break;
-						case cDefs.types.LED:
-							info = component.additional.color;
-							break;
-						default:
-							info = "*";
-							break;
-					}
-					return info;
+    	let bIdx = this.state.boxSelectedIdx;
+    	if (bIdx == -1) {
+	    	for (let idx=0; idx<this.state.store.boxes.length; idx++) {
+	    		let box = this.state.store.boxes[idx];
+	    		content.push(<StorageBox
+	    			box={box}
+	    			getComponent={uuid => {
+	    				return componentLookup(this.state.store, uuid);
+	    			}}
+	    			handleBoxChange={newBox => {
+	    				this.handleBoxChange(newBox, idx)
+	    			}}
+	    			key={idx}
+	    		/>)
+	    		content.push(<br />)
+	    		content.push(<hr />)
+	    	}
+	    } else {
+    		content.push(<StorageBox
+    			box={this.state.store.boxes[bIdx]}
+    			getComponent={uuid => {
+    				return componentLookup(this.state.store, uuid);
     			}}
-    			key={idx}
+    			handleBoxChange={newBox => {
+    				this.handleBoxChange(newBox, bIdx)
+    			}}
+    			key={bIdx}
     		/>)
-    		content.push(<br />)
-    	}
+	    }
 
     	return content;
+    }
+
+    handleBoxSelect = (event) => {
+    	let value = event.target.value;
+    	mutateState(this, {boxSelectedIdx: value})
     }
 
 	render() {
@@ -171,10 +193,33 @@ class Boxie extends React.Component {
 				)
 				break;
 			case this.nameToMenuIdx("Display Boxes"):
+				let boxSelectors = [];
+				for (let idx=0; idx<this.state.store.boxes.length; idx++) {
+					let box = this.state.store.boxes[idx];
+					let title = box.title;
+					let space = getFilledSpaceInBox(box);
+    				boxSelectors.push(<option disabled={space==0?true:false} value={idx}>{title}</option>);
+    			}
+
 				content = (
 					<div style={{"paddingLeft": "10px"}}>
-						<h1> All Boxes </h1>
-						{this.generateBoxes(this.state.store)}
+						<h1> Box Display </h1>
+						<FormControl variant="outlined">
+					        <InputLabel htmlFor="outlined-age-native-simple">Selected Box</InputLabel>
+					        <Select
+					          native
+					          value={this.state.boxSelectedIdx}
+					          onChange={this.handleBoxSelect}
+					          label="Selected Box"
+					          inputProps={{
+					            name: 'Selected Box',
+					            id: 'outlined-age-native-simple',
+					          }}
+					        >
+					          {boxSelectors}
+					        </Select>
+					    </FormControl>
+						{this.generateBoxes()}
 					</div>
 				)
 				break;
