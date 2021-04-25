@@ -200,6 +200,7 @@ class Boxie extends React.Component {
 					let space = getFilledSpaceInBox(box);
     				boxSelectors.push(<option disabled={space==0?true:false} value={idx}>{title}</option>);
     			}
+    			//Finally, add a "All Boxes" option with negative value
     			boxSelectors.push(<option value={-1}>All Boxes (Warning: Long Load)</option>)
 
 				content = (
