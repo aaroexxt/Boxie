@@ -67,7 +67,7 @@ class Boxie extends React.Component {
 
 	handleMenuChange = (event, idx) => {
 		if (idx == this.state.menu.selected) return; //make sure it's diff than what we have
-		
+
 		switch(idx) {
 			case this.nameToMenuIdx("Local Box"): //load box
 				console.log("LoadBox selected original")
@@ -225,7 +225,13 @@ class Boxie extends React.Component {
 					</div>
 				)
 				break;
-			case this.nameToMenuIdx("Lookup"):
+			case this.nameToMenuIdx("Add"):
+				content = (
+					<div style={{"paddingLeft": "10px"}}>
+						<h1> Add Component </h1>
+
+					</div>
+				)
 				break;
 			default:
 				content = (
@@ -262,5 +268,3 @@ ReactDOM.render(
   <Boxie />,
   document.getElementById('root')
 );
-
-

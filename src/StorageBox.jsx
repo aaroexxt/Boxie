@@ -242,7 +242,7 @@ class StorageBox extends React.Component {
 	render() {
 		const {classes} = this.props;
 		let box = this.props.box;
-	
+
 		return (
 			<div>
 				<h2> {box.title} </h2>
@@ -250,7 +250,7 @@ class StorageBox extends React.Component {
 				<Button variant="outlined" onClick={() => {this.toggleQuantityOverlay()}}> Toggle Quantity Overlay </Button>
 				{this.renderSections(box.sections)}
 
-				<Popover 
+				<Popover
 				  anchorReference="anchorPosition"
 				  anchorPosition={{ top: 100, left: 200 }}
 				  anchorOrigin={{
@@ -278,7 +278,7 @@ class StorageBox extends React.Component {
 					</Paper>
 				</Popover>
 
-				<Popover 
+				<Popover
 				  anchorReference="anchorPosition"
 				  anchorPosition={{ top: 100, left: 1000 }}
 				  anchorOrigin={{
