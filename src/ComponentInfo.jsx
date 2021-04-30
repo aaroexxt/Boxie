@@ -33,7 +33,7 @@ export default function ComponentInfo(props) {
     <p>
       Position:
       <b>
-        <i>{code}</i>
+        <i>&nbsp;{code}</i>
       </b>
     </p>
   );
@@ -44,7 +44,7 @@ export default function ComponentInfo(props) {
     case cDefs.types.LED:
       content.push(
         <p>
-          Type: {component.type}| Size: {component.size}
+          Type: {component.type} | Size: {component.size}
         </p>
       );
       break;
