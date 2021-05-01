@@ -16,9 +16,10 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 
 //Specific components
 import StorageBox from "./StorageBox.jsx";
-import DatabaseLS from "./databaseLS.jsx";
+import DatabaseLS from "./DatabaseLS.jsx";
 import NavHeader from "./NavHeader.jsx";
 import ExportLabels from "./ExportLabels.jsx";
+import ComponentLookup from "./ComponentLookup.jsx";
 
 //Util functions
 import mutateState from "./mutateState.jsx";
@@ -54,13 +55,13 @@ class Boxie extends React.Component {
       },
       menu: {
         options: [
-          ["Load/Store DB", true], //name, disabled
+          ["Load/Save DB", true], //name, enabled
           ["Display/Modify Boxes", false],
-          ["Export Labels", false],
+          ["Lookup", false],
           ["Add", false],
           ["Delete", false],
-          ["Save Data", false],
-          ["Lookup", false],
+          ["Assign", false],
+          ["Export Labels", false],
           ["BOM Management", false],
         ],
         selected: 0,
@@ -206,9 +207,9 @@ class Boxie extends React.Component {
     var content;
     switch (this.state.menu.selected) {
       /*********
-      Load/Store DB
+      Load/Save DB
        */
-      case this.nameToMenuIdx("Load/Store DB"):
+      case this.nameToMenuIdx("Load/Save DB"):
         content = (
           <DatabaseLS
             handleStorageUpload={this.handleStorageUpload}
@@ -273,14 +274,12 @@ class Boxie extends React.Component {
         break;
 
       /***************
-      Add Components
+      Lookup Components
       */
-      case this.nameToMenuIdx("Add"):
-        content = (
-          <div style={{ paddingLeft: "10px" }}>
-            <h1> Box Display </h1>
-          </div>
-        );
+      case this.nameToMenuIdx("Lookup"):
+        content =
+          ((<h1> Component Lookup </h1>),
+          (<ComponentLookup store={this.state.store} />));
         break;
 
       /**************
