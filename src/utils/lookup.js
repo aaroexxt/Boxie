@@ -1,3 +1,9 @@
+/**
+ * Looks up a component in the component store by UUID
+ * @param  {Object} store Component store object
+ * @param  {String} uuid  Component UUID
+ * @return {Object}       Component object or False
+ */
 export const componentLookup = (store, uuid) => {
   for (let i = 0; i < store.components.length; i++) {
     if (store.components[i].uuid == uuid) {
@@ -7,6 +13,12 @@ export const componentLookup = (store, uuid) => {
   return false;
 };
 
+/**
+ * Looks up a component and it's position in a box (if it's assigned)
+ * @param  {Object} store Component store object
+ * @param  {String} uuid  Component UUID
+ * @return {Object}       Component object and it's position
+ */
 export const componentLookupAndPosition = (store, uuid) => {
   let component = componentLookup(store, uuid);
   if (!component) return false;
@@ -35,6 +47,11 @@ export const componentLookupAndPosition = (store, uuid) => {
   return false;
 };
 
+/**
+ * Get the free space in a box
+ * @param  {Object} box Box object
+ * @return {Number}     Free space, in #s of spaces, in the box
+ */
 export const getFreeSpaceInBox = (box) => {
   let s = 0;
   for (let i = 0; i < box.sections.length; i++) {
@@ -50,6 +67,11 @@ export const getFreeSpaceInBox = (box) => {
   return s;
 };
 
+/**
+ * Get the filled space in a box
+ * @param  {Object} box Box object
+ * @return {Number}     Filled space, in #s of spaces, in the box
+ */
 export const getFilledSpaceInBox = (box) => {
   let s = 0;
   for (let i = 0; i < box.sections.length; i++) {

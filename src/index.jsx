@@ -50,6 +50,7 @@ class Boxie extends React.Component {
         components: [],
         componentTotal: 0,
         boxTotal: 0,
+        sessionComponents: [],
       },
       menu: {
         options: [
@@ -126,6 +127,7 @@ class Boxie extends React.Component {
         components: parsedData.components,
         componentTotal: parsedData.componentTotal,
         boxTotal: parsedData.boxTotal,
+        sessionComponents: [],
       };
       this.setState(this.state);
 
