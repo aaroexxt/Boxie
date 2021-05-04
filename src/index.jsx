@@ -279,7 +279,7 @@ class Boxie extends React.Component {
       case this.nameToMenuIdx("Lookup"):
         content =
           ((<h1> Component Lookup </h1>),
-          (<ComponentLookup store={this.state.store} />));
+          (<ComponentLookup store={this.state.store} showFiltered={true} />));
         break;
 
       /**************
