@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+# Boxie
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+By Aaron Becker
 
-## Available Scripts
+### What is Boxie?
 
-In the project directory, you can run:
+Boxie is an advanced inventory management system for my large collection of PCB surface mount components.
 
-### `npm start`
+Features:
+- Eagle PCB designer BOM support - can find and decrement components from store
+- "Box" and "Component" system - flexible yet easy to understand
+- Item information and lookup to find whatever you need quickly
+- Easy label generation and export for printing
+- Clean UI
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Project Intent
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Last year, as I became more and more interested in building circuit boards, I ended up ordering a lot of Digikey and Mouser parts. With a disorganized collection, more and more frequently I noticed that things would get lost or I would over. Boxie aims to solve this problem by letting me organize all of my components carefully while taking away much of the difficulty in manual organization.
 
-### `npm test`
+## Screenshots
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Box View and Management
 
-### `npm run build`
+Colors represent quantity in stock, can drag components to change box order
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Box View](screenshots/boxView.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Component Lookup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Configurable lookup allows searching by many parameters
 
-### `npm run eject`
+![Component Lookup](screenshots/componentLookup.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Label Export
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Easy label generation for printing allows quick turnaround to add another box or component to collection
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Exporting Labels](screenshots/exportLabels.png)
